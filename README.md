@@ -1,4 +1,6 @@
 si-util
 =======
 
-SourceInsight Utils
+Source Insight Utils Assist For Software Development
+Base on Online Macros.
+
