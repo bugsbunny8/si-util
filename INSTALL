@@ -1,5 +1,6 @@
 Installation
 1. copy all *.em to Source Insight Search Path
    Global Base Setting Dir Path can be found in "Preferences->Folders->Main User
-   Data Folder", put all *.em to BASE, which will be enabled in Base Project.
-2. Restart the Source Insight
+   Data Folder"
+2. add all *.em into BASE Project, which will be enabled in Base Project.
+3. Restart the Source Insight
