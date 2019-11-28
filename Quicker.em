@@ -1398,6 +1398,7 @@ macro CheckIsCodeBegin(szLine)
     }
     return 1
 }
+
 macro AutoInsertTraceInfoInPrj()
 {
     hprj = GetCurrentProj()
@@ -1543,7 +1544,7 @@ macro InsertFileHeaderEN(hbuf, ln,szName,szContent)
     GetFunctionList(hbuf,hnewbuf)
     InsBufLine(hbuf, ln + 0,  "/******************************************************************************")
     InsBufLine(hbuf, ln + 1,  "")
-    InsBufLine(hbuf, ln + 2,  "  Copyright (C), 2013-2013, Zheng Shaoxin")
+    InsBufLine(hbuf, ln + 2,  "  Copyright (C), 2013-2013, XXX XXXXX")
     InsBufLine(hbuf, ln + 3,  "")
     InsBufLine(hbuf, ln + 4,  " ******************************************************************************")
     sz = GetFileName(GetBufName (hbuf))
@@ -1591,7 +1592,7 @@ macro InsertFileHeaderCN(hbuf, ln,szName,szContent)
 {
     InsBufLine(hbuf, ln + 0,  "/******************************************************************************")
     InsBufLine(hbuf, ln + 1,  "")
-    InsBufLine(hbuf, ln + 2,  "                  °æÈ¨ËùÓÐ (C), 2001-2013, Zheng Shaoxin")
+    InsBufLine(hbuf, ln + 2,  "                  °æÈ¨ËùÓÐ (C), 2001-2013, XXX XXXXX")
     InsBufLine(hbuf, ln + 3,  "")
     InsBufLine(hbuf, ln + 4,  " ******************************************************************************")
     sz = GetFileName(GetBufName (hbuf))
@@ -1672,6 +1673,7 @@ macro GetFunctionList(hbuf,hnewbuf)
         isym = isym + 1
     }
 }
+
 macro InsertFileList(hbuf,hnewbuf,ln)
 {
     if(hnewbuf == hNil)
@@ -2027,7 +2029,7 @@ macro GetFunctionDef(hbuf,symbol)
 		szLine = RetVal.szContent
 		szLine = TrimString(szLine)
 		fIsEnd = RetVal.fIsEnd
-        //Èç¹ûÊÇ{±íÊ¾º¯Êý²ÎÊýÍ·½áÊøÁË
+        //Èç¹ûÊÇ'{'±íÊ¾º¯Êý²ÎÊýÍ·½áÊøÁË
         ret = strstr(szLine,"{")        
         if(ret != 0xffffffff)
         {
@@ -2962,7 +2964,7 @@ macro GetWordLeftOfIch(ich, sz)
              &&  (ch != "#") )
             break // stop at first non-identifier character
 */
-        //Ö»ÌáÈ¡×Ö·ûºÍ# { / *×÷ÎªÃüÁî
+        //Ö»ÌáÈ¡×Ö·ûºÍ'#' '{' '/' '*'×÷ÎªÃüÁî
         if ((asciiCh < asciiA || asciiCh > asciiZ) 
            && !IsNumber(ch)
            && ( ch != "#" && ch != "{" && ch != "/" && ch != "*"))
@@ -3151,7 +3153,7 @@ macro ExpandBraceLarge()
     szMid = ""
     if(sel.lnFirst == sel.lnLast && sel.ichFirst == sel.ichLim)
     {
-        //¶ÔÓÚÃ»ÓÐ¿éÑ¡ÔñµÄÇé¿ö£¬Ö±½Ó²åÈë{}¼´¿É
+        //¶ÔÓÚÃ»ÓÐ¿éÑ¡ÔñµÄÇé¿ö£¬Ö±½Ó²åÈë"{}"¼´¿É
         if( nLeft == strlen(szLine) )
         {
             SetBufSelText (hbuf, "{")
@@ -3750,6 +3752,7 @@ macro SkipControlCharFromString(szLine)
    }
 }
 */
+
 macro SkipCommentFromString(szLine,isCommentEnd)
 {
     RetVal = ""
@@ -3758,7 +3761,7 @@ macro SkipCommentFromString(szLine,isCommentEnd)
     nIdx = 0
     while(nIdx < nLen )
     {
-        //Èç¹ûµ±Ç°ÐÐ¿ªÊ¼»¹ÊÇ±»×¢ÊÍ£¬»òÓöµ½ÁË×¢ÊÍ¿ªÊ¼µÄ±ä±ê¼Ç£¬×¢ÊÍÄÚÈÝ¸ÄÎª¿Õ¸ñÍ
+        //Èç¹ûµ±Ç°ÐÐ¿ªÊ¼»¹ÊÇ±»×¢ÊÍ£¬»òÓöµ½ÁË×¢ÊÍ¿ªÊ¼µÄ±ä±ê¼Ç£¬×¢ÊÍÄÚÈÝ¸ÄÎª¿Õ¸ñ
         if( (isCommentEnd == 0) || (szLine[nIdx] == "/" && szLine[nIdx+1] == "*"))
         {
             fIsEnd = 0
@@ -4448,6 +4451,7 @@ macro ReviseCommentProc(hbuf,ln,szCmd,szMyName,szLine1)
         return
     }
 }
+
 macro InsertReviseAdd()
 {
     hwnd = GetCurrentWnd()
@@ -4636,6 +4640,7 @@ macro IfdefStr(sz)
     InsBufLine(hbuf, lnFirst, "@szLeft@#ifdef @sz@")
     SetBufIns(hbuf,lnFirst + 1,strlen(szLeft))
 }
+
 macro IfndefStr(sz)
 {
     hwnd = GetCurrentWnd()
@@ -4868,5 +4873,3 @@ macro FileHeaderCreate()
         InsertFileHeaderEN( hbuf,ln, szMyName,"" )
     }
 }
-
-
