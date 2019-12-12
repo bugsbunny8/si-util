@@ -28,6 +28,16 @@ macro Review_Restore_Link()
     //updateSummary(hbuf)
 }
 
+/* Review Config macro, config user name and email */
+macro Review_Config()
+{
+	szReviewerName = Ask("Enter Reviewer Name: ");
+	setreg(REVIEWER_NAME, szReviewerName)
+
+	szReviewerEmail = Ask("Enter Reviewer Email: ");
+	setreg(REVIEWER_EMAIL, szReviewerEmail)
+}
+
 macro Review_Add_Comment()
 {
     hbuf = GetCurrentBuf()
@@ -43,7 +53,29 @@ macro Review_Add_Comment()
     sLineNumber = cat( "Line     : ", curLineNumber + 1 )
     sLocation = cat(sLocation,"/L");
     sLocation = cat(sLocation,curLineNumber + 1);
+
+    /* get the licence user name for the reviewer name */
+    /*progRecord = GetProgramEnvironmentInfo()
+    szReviewerName = progRecord.UserName*/
+
+    /* get Reviewer name and email configuration */
+	szReviewerName = getreg(REVIEWER_NAME)
+    if(strlen( szReviewerName ) == 0)
+    {
+        szReviewerName = Ask("Enter Reviewer Name: ");
+        setreg(REVIEWER_NAME, szReviewerName)
+    }
     
+	szReviewerEmail = getreg(REVIEWER_EMAIL)
+    if(strlen( szReviewerEmail ) == 0)
+    {
+        szReviewerEmail = Ask("Enter Reviewer Email: ");
+        setreg(REVIEWER_EMAIL, szReviewerEmail)
+    }
+    /* using Reviewer as xxxx <xxxx@xxx.cn> format */
+    szReviewer = szReviewerName # "<" # szReviewerEmail # ">"
+
+	/* get Defect Level */
     promote = "Defect : D,d(Defect); Q,q(Query)"
     sTemp = ask(promote);
     sTemp = toupper(sTemp[0]);
@@ -52,11 +84,10 @@ macro Review_Add_Comment()
         sTemp = ask(cat("Please input again! ", promote));
         sTemp = toupper(sTemp[0]);
     }
-
     if( sTemp == "D" ) sTemp = "Defect缺陷";
     else if ( sTemp == "Q" ) sTemp = "Query疑问";
     sClass = cat("Class    : ",sTemp);
-        
+    
     /* get the severity of the current comment */
     if(sTemp == "Defect缺陷")
     {
@@ -132,10 +163,6 @@ macro Review_Add_Comment()
     sTemp = ask(promote);
     sComments = cat( "Comments : ", sTemp );
     
-    /* get the licence user name for the reviewer name */
-    progRecord = GetProgramEnvironmentInfo()
-    sMyName = progRecord.UserName
-
     /* get the ReviewComment buffer handle */
     bNewCreated = false; // used for the review comment is firstly created
     hout = GetBufHandle("ReviewComment.txt")
@@ -154,7 +181,7 @@ macro Review_Add_Comment()
             /* Get the owner‘s name from the environment variable: MYNAME.    */
             /* If the variable doesn‘t exist, then the owner field is skipped.*/
             /*----------------------------------------------------------------*/
-            AppendBufLine(hout, cat("Reviewer Name : ", sMyName))
+            AppendBufLine(hout, cat("Reviewer Name : ", szReviewer))
             
             AppendBufLine(hout, "-------------------------------------------------------------------------")
         }
@@ -166,7 +193,7 @@ macro Review_Add_Comment()
     AppendBufLine(hout, sFileName)
     AppendBufLine(hout, sLineNumber)
     AppendBufLine(hout, sLocation)
-    AppendBufLine(hout, cat("Reviewer : ", sMyName))
+    AppendBufLine(hout, cat("Reviewer : ", szReviewer))
     AppendBufLine(hout, cat("Symbol   : ", curFunc) )
     AppendBufLine(hout, sCategories)
     AppendBufLine(hout, sClass)
@@ -190,6 +217,7 @@ macro Review_Summary()
     updateSummary(hbuf)
 }
 
+/* convert to Lotus 123 format */
 macro Review_Output_123()
 {
     sSign123 = "-----------------------Convert to lotus123 format------------------------------------------------"
